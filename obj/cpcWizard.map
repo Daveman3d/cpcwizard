@@ -1,0 +1,133 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           cpct_video
+     00000000  l__CABS                         
+     00000000  l__DABS                         
+     00000000  l__DATA                         
+     00000000  l__GSFINAL                      
+     00000000  l__GSINIT                       
+     00000000  l__HOME                         
+     00000000  s__CABS                         
+     00000000  s__DABS                         
+     00000003  l__INITIALIZED                  
+     00000003  l__INITIALIZER                  
+     00000520  l__CODE                         
+     00004000  s__CODE                         
+     00004520  s__DATA                         
+     00004520  s__INITIALIZED                  
+     00004523  s__GSFINAL                      
+     00004523  s__GSINIT                       
+     00004523  s__HOME                         
+     00004523  s__INITIALIZER                  
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    00000520 =        1312. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000040E0  _init                              main
+     000040FF  _g_tile_mago_simple                main
+     0000415F  _g_tile_mago_simple_iz             main
+     000041BF  _g_tile_block                      main
+     000041DF  _g_palette                         main
+     000041E3  _pantalla_start                    main
+     000041E4  _main                              main
+     0000432B  _fase_1                            main
+     0000432C  _fase_jefe                         main
+     0000432D  _cpct_setPalette                   cpct_video
+     00004344  _cpct_isKeyPressed                 cpct_keyboard
+     00004344  cpct_isKeyPressed_asm              cpct_keyboard
+     00004350  _cpct_scanKeyboard_f               cpct_keyboard
+     00004350  cpct_scanKeyboard_f_asm            cpct_keyboard
+     000043BA  _cpct_fw2hw                        cpct_video
+     000043CD  _cpct_keyboardStatusBuffer         cpct_keyboard
+     000043D7  _cpct_drawSpriteMasked             cpct_sprites
+     00004406  cpct_firmware2hw_colour            
+     00004421  _cpct_waitVSYNC                    cpct_video
+     00004421  cpct_waitVSYNC_asm                 cpct_video
+     00004429  _cpct_setVideoMode                 cpct_video
+     00004437  _cpct_disableFirmware              cpct_firmware
+     00004437  _cpct_removeInterruptHandler       cpct_firmware
+     00004437  cpct_disableFirmware_asm           cpct_firmware
+     00004437  cpct_removeInterruptHandler_asm    cpct_firmware
+     00004447  _cpct_drawSolidBox                 cpct_sprites
+     000044FF  _cpct_mode_rom_status              cpct_firmware
+     00004500  _cpct_getScreenPtr                 cpct_video
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZED                        00004520    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004520  _player_salto                      main
+     00004521  _subiendo                          main
+     00004522  _pos_player                        main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZER                        00004523    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+
+Files Linked                              [ module(s) ]
+
+obj/mago_simple.rel                       [ mago_simple ]
+obj/main.rel                              [ main ]
+
+
+Libraries Linked                          [ object file ]
+
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setPalette_cbindings.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_isKeyPressed.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_scanKeyboard_f.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_fw2hw_cbindings.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ keyboard.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSpriteMasked_cbindings. ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_firmware2hw_colour_table.re ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_waitVSYNC.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setVideoMode_cbindings.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_removeInterruptHandler.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSolidBox_cbindings.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpc_mode_rom_status.rel ]
+/cygdrive/c/Users/Churrums/Google_Drive/home/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getScreenPtr_cbindings.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+
+User Base Address Definitions
+
+_CODE = 0x4000
+_DATA = 0x0000
+
+
