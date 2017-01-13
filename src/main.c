@@ -71,7 +71,7 @@ void main(void) {
 #define VMEM (u8*)0xC000
 
 //creamos la paleta porque sino coge la del firmware con el fondo azul y letras amarillas
-const u8 g_palette[4]={0, 2, 23, 26};
+const u8 g_palette[4]={10, 2, 23, 26};
 
 u8 player_salto=0;//inciamos la variable para detectar si está o no saltando 0 si no y 1 si sí
 u8 subiendo=0;//variable para indicar si está subiendo o bajando
@@ -96,6 +96,7 @@ void init()
    // Set the colour palette
    cpct_fw2hw     (g_palette, 4); // Convert our palette from firmware to hardware colours 
    cpct_setPalette(g_palette, 4); // Set up the hardware palette using hardware colours   
+   cpct_setBorder(0);
 }
 
 //Cargamos la pantalla de inicio
@@ -134,7 +135,7 @@ void main(void) {
       cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
 
       //pintamos el escenario
-      cpct_drawSpriteMasked(g_tile_block, pvideomem, SP_W+4, SP_H);
+     // cpct_drawSpriteMasked(g_tile_block, pvideomem, SP_W+4, SP_H);
 
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of

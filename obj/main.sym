@@ -17,29 +17,29 @@ Symbol Table
     _cpct_getScreenPtr                                             **** GX
     _cpct_isKeyPressed                                             **** GX
     _cpct_scanKeyboard_f                                           **** GX
+    _cpct_setPALColour                                             **** GX
     _cpct_setPalette                                               **** GX
     _cpct_setVideoMode                                             **** GX
     _cpct_waitVSYNC                                                **** GX
-  0 _fase_1                                                        024B GR
-  0 _fase_jefe                                                     024C GR
-  0 _g_palette                                                     00FF GR
-  0 _g_tile_block                                                  00DF GR
-  0 _g_tile_mago_simple                                            001F GR
-  0 _g_tile_mago_simple_iz                                         007F GR
+  0 _fase_1                                                        0240 GR
+  0 _fase_jefe                                                     0241 GR
+  0 _g_palette                                                     0106 GR
+  0 _g_tile_block                                                  00E6 GR
+  0 _g_tile_mago_simple                                            0026 GR
+  0 _g_tile_mago_simple_iz                                         0086 GR
   0 _init                                                          0000 GR
-  0 _main                                                          0104 GR
-  0 _pantalla_start                                                0103 GR
+  0 _main                                                          010B GR
+  0 _pantalla_start                                                010A GR
   2 _player_salto                                                  0000 GR
   2 _pos_player                                                    0002 GR
   2 _subiendo                                                      0001 GR
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size  24D   flags    0
+   0 _CODE                                      size  242   flags    0
    1 _DATA                                      size    0   flags    0
    2 _INITIALIZED                               size    3   flags    0
    3 _DABS                                      size    0   flags    8

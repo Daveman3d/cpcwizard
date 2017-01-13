@@ -14,562 +14,553 @@
                              14 	.globl _pantalla_start
                              15 	.globl _init
                              16 	.globl _cpct_getScreenPtr
-                             17 	.globl _cpct_setPalette
-                             18 	.globl _cpct_fw2hw
-                             19 	.globl _cpct_waitVSYNC
-                             20 	.globl _cpct_setVideoMode
-                             21 	.globl _cpct_drawSolidBox
-                             22 	.globl _cpct_drawSpriteMasked
-                             23 	.globl _cpct_isKeyPressed
-                             24 	.globl _cpct_scanKeyboard_f
-                             25 	.globl _cpct_disableFirmware
-                             26 	.globl _pos_player
-                             27 	.globl _subiendo
-                             28 	.globl _player_salto
-                             29 	.globl _g_palette
-                             30 	.globl _g_tile_block
-                             31 	.globl _g_tile_mago_simple_iz
-                             32 	.globl _g_tile_mago_simple
-                             33 ;--------------------------------------------------------
-                             34 ; special function registers
-                             35 ;--------------------------------------------------------
+                             17 	.globl _cpct_setPALColour
+                             18 	.globl _cpct_setPalette
+                             19 	.globl _cpct_fw2hw
+                             20 	.globl _cpct_waitVSYNC
+                             21 	.globl _cpct_setVideoMode
+                             22 	.globl _cpct_drawSolidBox
+                             23 	.globl _cpct_drawSpriteMasked
+                             24 	.globl _cpct_isKeyPressed
+                             25 	.globl _cpct_scanKeyboard_f
+                             26 	.globl _cpct_disableFirmware
+                             27 	.globl _pos_player
+                             28 	.globl _subiendo
+                             29 	.globl _player_salto
+                             30 	.globl _g_palette
+                             31 	.globl _g_tile_block
+                             32 	.globl _g_tile_mago_simple_iz
+                             33 	.globl _g_tile_mago_simple
+                             34 ;--------------------------------------------------------
+                             35 ; special function registers
                              36 ;--------------------------------------------------------
-                             37 ; ram data
-                             38 ;--------------------------------------------------------
-                             39 	.area _DATA
-                             40 ;--------------------------------------------------------
-                             41 ; ram data
-                             42 ;--------------------------------------------------------
-                             43 	.area _INITIALIZED
-   0000                      44 _player_salto::
-   0000                      45 	.ds 1
-   0001                      46 _subiendo::
-   0001                      47 	.ds 1
-   0002                      48 _pos_player::
-   0002                      49 	.ds 1
-                             50 ;--------------------------------------------------------
-                             51 ; absolute external ram data
-                             52 ;--------------------------------------------------------
-                             53 	.area _DABS (ABS)
-                             54 ;--------------------------------------------------------
-                             55 ; global & static initialisations
-                             56 ;--------------------------------------------------------
-                             57 	.area _HOME
-                             58 	.area _GSINIT
-                             59 	.area _GSFINAL
-                             60 	.area _GSINIT
-                             61 ;--------------------------------------------------------
-                             62 ; Home
-                             63 ;--------------------------------------------------------
-                             64 	.area _HOME
+                             37 ;--------------------------------------------------------
+                             38 ; ram data
+                             39 ;--------------------------------------------------------
+                             40 	.area _DATA
+                             41 ;--------------------------------------------------------
+                             42 ; ram data
+                             43 ;--------------------------------------------------------
+                             44 	.area _INITIALIZED
+   0000                      45 _player_salto::
+   0000                      46 	.ds 1
+   0001                      47 _subiendo::
+   0001                      48 	.ds 1
+   0002                      49 _pos_player::
+   0002                      50 	.ds 1
+                             51 ;--------------------------------------------------------
+                             52 ; absolute external ram data
+                             53 ;--------------------------------------------------------
+                             54 	.area _DABS (ABS)
+                             55 ;--------------------------------------------------------
+                             56 ; global & static initialisations
+                             57 ;--------------------------------------------------------
+                             58 	.area _HOME
+                             59 	.area _GSINIT
+                             60 	.area _GSFINAL
+                             61 	.area _GSINIT
+                             62 ;--------------------------------------------------------
+                             63 ; Home
+                             64 ;--------------------------------------------------------
                              65 	.area _HOME
-                             66 ;--------------------------------------------------------
-                             67 ; code
-                             68 ;--------------------------------------------------------
-                             69 	.area _CODE
-                             70 ;src/main.c:87: void init()
-                             71 ;	---------------------------------
-                             72 ; Function init
-                             73 ; ---------------------------------
-   0000                      74 _init::
-                             75 ;src/main.c:93: cpct_disableFirmware();
-   0000 CDr00r00      [17]   76 	call	_cpct_disableFirmware
-                             77 ;src/main.c:95: cpct_setVideoMode(1);
-   0003 2E 01         [ 7]   78 	ld	l,#0x01
-   0005 CDr00r00      [17]   79 	call	_cpct_setVideoMode
-                             80 ;src/main.c:97: cpct_fw2hw     (g_palette, 4); // Convert our palette from firmware to hardware colours 
-   0008 21 04 00      [10]   81 	ld	hl,#0x0004
-   000B E5            [11]   82 	push	hl
-   000C 21rFFr00      [10]   83 	ld	hl,#_g_palette
-   000F E5            [11]   84 	push	hl
-   0010 CDr00r00      [17]   85 	call	_cpct_fw2hw
-                             86 ;src/main.c:98: cpct_setPalette(g_palette, 4); // Set up the hardware palette using hardware colours   
-   0013 21 04 00      [10]   87 	ld	hl,#0x0004
-   0016 E5            [11]   88 	push	hl
-   0017 21rFFr00      [10]   89 	ld	hl,#_g_palette
-   001A E5            [11]   90 	push	hl
-   001B CDr00r00      [17]   91 	call	_cpct_setPalette
-   001E C9            [10]   92 	ret
-   001F                      93 _g_tile_mago_simple:
-   001F 00                   94 	.db #0x00	; 0
-   0020 00                   95 	.db #0x00	; 0
-   0021 00                   96 	.db #0x00	; 0
-   0022 00                   97 	.db #0x00	; 0
-   0023 00                   98 	.db #0x00	; 0
-   0024 00                   99 	.db #0x00	; 0
-   0025 00                  100 	.db #0x00	; 0
-   0026 08                  101 	.db #0x08	; 8
-   0027 08                  102 	.db #0x08	; 8
-   0028 00                  103 	.db #0x00	; 0
-   0029 00                  104 	.db #0x00	; 0
-   002A 00                  105 	.db #0x00	; 0
-   002B 00                  106 	.db #0x00	; 0
-   002C 04                  107 	.db #0x04	; 4
-   002D 04                  108 	.db #0x04	; 4
-   002E 04                  109 	.db #0x04	; 4
-   002F 08                  110 	.db #0x08	; 8
-   0030 00                  111 	.db #0x00	; 0
-   0031 00                  112 	.db #0x00	; 0
-   0032 08                  113 	.db #0x08	; 8
-   0033 08                  114 	.db #0x08	; 8
-   0034 08                  115 	.db #0x08	; 8
-   0035 00                  116 	.db #0x00	; 0
-   0036 00                  117 	.db #0x00	; 0
-   0037 00                  118 	.db #0x00	; 0
-   0038 0C                  119 	.db #0x0C	; 12
-   0039 08                  120 	.db #0x08	; 8
-   003A 44                  121 	.db #0x44	; 68	'D'
-   003B 88                  122 	.db #0x88	; 136
-   003C 00                  123 	.db #0x00	; 0
-   003D 00                  124 	.db #0x00	; 0
-   003E 04                  125 	.db #0x04	; 4
-   003F 44                  126 	.db #0x44	; 68	'D'
-   0040 88                  127 	.db #0x88	; 136
-   0041 CC                  128 	.db #0xCC	; 204
-   0042 00                  129 	.db #0x00	; 0
-   0043 00                  130 	.db #0x00	; 0
-   0044 00                  131 	.db #0x00	; 0
-   0045 44                  132 	.db #0x44	; 68	'D'
-   0046 88                  133 	.db #0x88	; 136
-   0047 CC                  134 	.db #0xCC	; 204
-   0048 00                  135 	.db #0x00	; 0
-   0049 00                  136 	.db #0x00	; 0
-   004A 00                  137 	.db #0x00	; 0
-   004B CC                  138 	.db #0xCC	; 204
-   004C CC                  139 	.db #0xCC	; 204
-   004D 00                  140 	.db #0x00	; 0
-   004E 00                  141 	.db #0x00	; 0
-   004F 00                  142 	.db #0x00	; 0
-   0050 00                  143 	.db #0x00	; 0
-   0051 00                  144 	.db #0x00	; 0
-   0052 00                  145 	.db #0x00	; 0
-   0053 00                  146 	.db #0x00	; 0
-   0054 00                  147 	.db #0x00	; 0
-   0055 00                  148 	.db #0x00	; 0
-   0056 00                  149 	.db #0x00	; 0
-   0057 0C                  150 	.db #0x0C	; 12
-   0058 0C                  151 	.db #0x0C	; 12
-   0059 0C                  152 	.db #0x0C	; 12
-   005A 00                  153 	.db #0x00	; 0
-   005B 00                  154 	.db #0x00	; 0
-   005C 04                  155 	.db #0x04	; 4
-   005D 04                  156 	.db #0x04	; 4
-   005E 04                  157 	.db #0x04	; 4
-   005F 00                  158 	.db #0x00	; 0
-   0060 88                  159 	.db #0x88	; 136
-   0061 00                  160 	.db #0x00	; 0
-   0062 00                  161 	.db #0x00	; 0
-   0063 08                  162 	.db #0x08	; 8
-   0064 08                  163 	.db #0x08	; 8
-   0065 CC                  164 	.db #0xCC	; 204
-   0066 00                  165 	.db #0x00	; 0
-   0067 00                  166 	.db #0x00	; 0
-   0068 04                  167 	.db #0x04	; 4
-   0069 00                  168 	.db #0x00	; 0
-   006A CC                  169 	.db #0xCC	; 204
-   006B 00                  170 	.db #0x00	; 0
-   006C 00                  171 	.db #0x00	; 0
-   006D 00                  172 	.db #0x00	; 0
-   006E 08                  173 	.db #0x08	; 8
-   006F 04                  174 	.db #0x04	; 4
-   0070 08                  175 	.db #0x08	; 8
-   0071 08                  176 	.db #0x08	; 8
-   0072 00                  177 	.db #0x00	; 0
-   0073 00                  178 	.db #0x00	; 0
-   0074 00                  179 	.db #0x00	; 0
-   0075 00                  180 	.db #0x00	; 0
-   0076 00                  181 	.db #0x00	; 0
-   0077 00                  182 	.db #0x00	; 0
-   0078 00                  183 	.db #0x00	; 0
-   0079 00                  184 	.db #0x00	; 0
-   007A 00                  185 	.db #0x00	; 0
-   007B 00                  186 	.db #0x00	; 0
-   007C 00                  187 	.db #0x00	; 0
-   007D 00                  188 	.db #0x00	; 0
-   007E 00                  189 	.db #0x00	; 0
-   007F                     190 _g_tile_mago_simple_iz:
-   007F CC                  191 	.db #0xCC	; 204
-   0080 CC                  192 	.db #0xCC	; 204
-   0081 CC                  193 	.db #0xCC	; 204
-   0082 88                  194 	.db #0x88	; 136
-   0083 00                  195 	.db #0x00	; 0
-   0084 44                  196 	.db #0x44	; 68	'D'
-   0085 00                  197 	.db #0x00	; 0
-   0086 00                  198 	.db #0x00	; 0
-   0087 00                  199 	.db #0x00	; 0
-   0088 04                  200 	.db #0x04	; 4
-   0089 04                  201 	.db #0x04	; 4
-   008A 44                  202 	.db #0x44	; 68	'D'
-   008B 88                  203 	.db #0x88	; 136
-   008C 04                  204 	.db #0x04	; 4
-   008D 08                  205 	.db #0x08	; 8
-   008E 08                  206 	.db #0x08	; 8
-   008F 08                  207 	.db #0x08	; 8
-   0090 44                  208 	.db #0x44	; 68	'D'
-   0091 CC                  209 	.db #0xCC	; 204
-   0092 00                  210 	.db #0x00	; 0
-   0093 04                  211 	.db #0x04	; 4
-   0094 04                  212 	.db #0x04	; 4
-   0095 04                  213 	.db #0x04	; 4
-   0096 44                  214 	.db #0x44	; 68	'D'
-   0097 CC                  215 	.db #0xCC	; 204
-   0098 44                  216 	.db #0x44	; 68	'D'
-   0099 88                  217 	.db #0x88	; 136
-   009A 04                  218 	.db #0x04	; 4
-   009B 0C                  219 	.db #0x0C	; 12
-   009C 44                  220 	.db #0x44	; 68	'D'
-   009D 88                  221 	.db #0x88	; 136
-   009E CC                  222 	.db #0xCC	; 204
-   009F 44                  223 	.db #0x44	; 68	'D'
-   00A0 88                  224 	.db #0x88	; 136
-   00A1 08                  225 	.db #0x08	; 8
-   00A2 CC                  226 	.db #0xCC	; 204
-   00A3 88                  227 	.db #0x88	; 136
-   00A4 CC                  228 	.db #0xCC	; 204
-   00A5 44                  229 	.db #0x44	; 68	'D'
-   00A6 88                  230 	.db #0x88	; 136
-   00A7 00                  231 	.db #0x00	; 0
-   00A8 44                  232 	.db #0x44	; 68	'D'
-   00A9 CC                  233 	.db #0xCC	; 204
-   00AA 00                  234 	.db #0x00	; 0
-   00AB CC                  235 	.db #0xCC	; 204
-   00AC CC                  236 	.db #0xCC	; 204
-   00AD 44                  237 	.db #0x44	; 68	'D'
-   00AE 00                  238 	.db #0x00	; 0
-   00AF 88                  239 	.db #0x88	; 136
-   00B0 00                  240 	.db #0x00	; 0
-   00B1 00                  241 	.db #0x00	; 0
-   00B2 00                  242 	.db #0x00	; 0
-   00B3 44                  243 	.db #0x44	; 68	'D'
-   00B4 CC                  244 	.db #0xCC	; 204
-   00B5 88                  245 	.db #0x88	; 136
-   00B6 0C                  246 	.db #0x0C	; 12
-   00B7 0C                  247 	.db #0x0C	; 12
-   00B8 0C                  248 	.db #0x0C	; 12
-   00B9 44                  249 	.db #0x44	; 68	'D'
-   00BA CC                  250 	.db #0xCC	; 204
-   00BB 00                  251 	.db #0x00	; 0
-   00BC 00                  252 	.db #0x00	; 0
-   00BD 08                  253 	.db #0x08	; 8
-   00BE 08                  254 	.db #0x08	; 8
-   00BF 08                  255 	.db #0x08	; 8
-   00C0 CC                  256 	.db #0xCC	; 204
-   00C1 88                  257 	.db #0x88	; 136
-   00C2 00                  258 	.db #0x00	; 0
-   00C3 04                  259 	.db #0x04	; 4
-   00C4 04                  260 	.db #0x04	; 4
-   00C5 00                  261 	.db #0x00	; 0
-   00C6 CC                  262 	.db #0xCC	; 204
-   00C7 88                  263 	.db #0x88	; 136
-   00C8 00                  264 	.db #0x00	; 0
-   00C9 44                  265 	.db #0x44	; 68	'D'
-   00CA 00                  266 	.db #0x00	; 0
-   00CB 08                  267 	.db #0x08	; 8
-   00CC CC                  268 	.db #0xCC	; 204
-   00CD 88                  269 	.db #0x88	; 136
-   00CE 04                  270 	.db #0x04	; 4
-   00CF 04                  271 	.db #0x04	; 4
-   00D0 08                  272 	.db #0x08	; 8
-   00D1 04                  273 	.db #0x04	; 4
-   00D2 44                  274 	.db #0x44	; 68	'D'
-   00D3 00                  275 	.db #0x00	; 0
-   00D4 00                  276 	.db #0x00	; 0
-   00D5 00                  277 	.db #0x00	; 0
-   00D6 00                  278 	.db #0x00	; 0
-   00D7 00                  279 	.db #0x00	; 0
-   00D8 44                  280 	.db #0x44	; 68	'D'
-   00D9 00                  281 	.db #0x00	; 0
-   00DA 00                  282 	.db #0x00	; 0
-   00DB CC                  283 	.db #0xCC	; 204
-   00DC 00                  284 	.db #0x00	; 0
-   00DD 00                  285 	.db #0x00	; 0
-   00DE CC                  286 	.db #0xCC	; 204
-   00DF                     287 _g_tile_block:
-   00DF 0F                  288 	.db #0x0F	; 15
-   00E0 0F                  289 	.db #0x0F	; 15
-   00E1 0F                  290 	.db #0x0F	; 15
-   00E2 0F                  291 	.db #0x0F	; 15
-   00E3 0F                  292 	.db #0x0F	; 15
-   00E4 0F                  293 	.db #0x0F	; 15
-   00E5 0F                  294 	.db #0x0F	; 15
-   00E6 0F                  295 	.db #0x0F	; 15
-   00E7 0F                  296 	.db #0x0F	; 15
-   00E8 0F                  297 	.db #0x0F	; 15
-   00E9 0F                  298 	.db #0x0F	; 15
-   00EA 0F                  299 	.db #0x0F	; 15
-   00EB 0F                  300 	.db #0x0F	; 15
-   00EC 0F                  301 	.db #0x0F	; 15
-   00ED 0F                  302 	.db #0x0F	; 15
-   00EE 0F                  303 	.db #0x0F	; 15
-   00EF 0F                  304 	.db #0x0F	; 15
-   00F0 0F                  305 	.db #0x0F	; 15
-   00F1 0F                  306 	.db #0x0F	; 15
-   00F2 0F                  307 	.db #0x0F	; 15
-   00F3 0F                  308 	.db #0x0F	; 15
-   00F4 0F                  309 	.db #0x0F	; 15
-   00F5 0F                  310 	.db #0x0F	; 15
-   00F6 0F                  311 	.db #0x0F	; 15
-   00F7 0F                  312 	.db #0x0F	; 15
-   00F8 0F                  313 	.db #0x0F	; 15
-   00F9 0F                  314 	.db #0x0F	; 15
-   00FA 0F                  315 	.db #0x0F	; 15
-   00FB 0F                  316 	.db #0x0F	; 15
-   00FC 0F                  317 	.db #0x0F	; 15
-   00FD 0F                  318 	.db #0x0F	; 15
-   00FE 0F                  319 	.db #0x0F	; 15
-   00FF                     320 _g_palette:
-   00FF 00                  321 	.db #0x00	; 0
-   0100 02                  322 	.db #0x02	; 2
-   0101 17                  323 	.db #0x17	; 23
-   0102 1A                  324 	.db #0x1A	; 26
-                            325 ;src/main.c:103: void pantalla_start()
-                            326 ;	---------------------------------
-                            327 ; Function pantalla_start
-                            328 ; ---------------------------------
-   0103                     329 _pantalla_start::
-                            330 ;src/main.c:110: }
-   0103 C9            [10]  331 	ret
-                            332 ;src/main.c:114: void main(void) {
-                            333 ;	---------------------------------
-                            334 ; Function main
-                            335 ; ---------------------------------
-   0104                     336 _main::
-   0104 DD E5         [15]  337 	push	ix
-   0106 DD 21 00 00   [14]  338 	ld	ix,#0
-   010A DD 39         [15]  339 	add	ix,sp
-   010C F5            [11]  340 	push	af
-   010D F5            [11]  341 	push	af
-                            342 ;src/main.c:115: Tplayer posicionp={0,100};
-   010E 21 00 00      [10]  343 	ld	hl,#0x0000
-   0111 39            [11]  344 	add	hl,sp
-   0112 36 00         [10]  345 	ld	(hl),#0x00
-   0114 21 00 00      [10]  346 	ld	hl,#0x0000
-   0117 39            [11]  347 	add	hl,sp
-   0118 DD 75 FE      [19]  348 	ld	-2 (ix),l
-   011B DD 74 FF      [19]  349 	ld	-1 (ix),h
-   011E EB            [ 4]  350 	ex	de,hl
-   011F 13            [ 6]  351 	inc	de
-   0120 3E 64         [ 7]  352 	ld	a,#0x64
-   0122 12            [ 7]  353 	ld	(de),a
-                            354 ;src/main.c:118: init();
-   0123 D5            [11]  355 	push	de
-   0124 CDr00r00      [17]  356 	call	_init
-   0127 D1            [10]  357 	pop	de
-                            358 ;src/main.c:124: while(1) {
-   0128                     359 00126$:
-                            360 ;src/main.c:125: cpct_waitVSYNC ();//esperamos a que haya recorrido la pantalla
-   0128 D5            [11]  361 	push	de
-   0129 CDr00r00      [17]  362 	call	_cpct_waitVSYNC
-   012C D1            [10]  363 	pop	de
-                            364 ;src/main.c:126: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
-   012D 1A            [ 7]  365 	ld	a,(de)
-   012E DD 6E FE      [19]  366 	ld	l,-2 (ix)
-   0131 DD 66 FF      [19]  367 	ld	h,-1 (ix)
-   0134 46            [ 7]  368 	ld	b,(hl)
-   0135 D5            [11]  369 	push	de
-   0136 F5            [11]  370 	push	af
-   0137 33            [ 6]  371 	inc	sp
-   0138 C5            [11]  372 	push	bc
-   0139 33            [ 6]  373 	inc	sp
-   013A 21 00 C0      [10]  374 	ld	hl,#0xC000
-   013D E5            [11]  375 	push	hl
-   013E CDr00r00      [17]  376 	call	_cpct_getScreenPtr
-   0141 4D            [ 4]  377 	ld	c,l
-   0142 44            [ 4]  378 	ld	b,h
-   0143 D1            [10]  379 	pop	de
-                            380 ;src/main.c:134: cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
-   0144 C5            [11]  381 	push	bc
-   0145 D5            [11]  382 	push	de
-   0146 21 03 10      [10]  383 	ld	hl,#0x1003
-   0149 E5            [11]  384 	push	hl
-   014A AF            [ 4]  385 	xor	a, a
-   014B F5            [11]  386 	push	af
-   014C 33            [ 6]  387 	inc	sp
-   014D C5            [11]  388 	push	bc
-   014E CDr00r00      [17]  389 	call	_cpct_drawSolidBox
-   0151 F1            [10]  390 	pop	af
-   0152 F1            [10]  391 	pop	af
-   0153 33            [ 6]  392 	inc	sp
-   0154 D1            [10]  393 	pop	de
-   0155 C1            [10]  394 	pop	bc
-                            395 ;src/main.c:137: cpct_drawSpriteMasked(g_tile_block, pvideomem, SP_W+4, SP_H);
-   0156 D5            [11]  396 	push	de
-   0157 21 07 10      [10]  397 	ld	hl,#0x1007
-   015A E5            [11]  398 	push	hl
-   015B C5            [11]  399 	push	bc
-   015C 21rDFr00      [10]  400 	ld	hl,#_g_tile_block
-   015F E5            [11]  401 	push	hl
-   0160 CDr00r00      [17]  402 	call	_cpct_drawSpriteMasked
-   0163 CDr00r00      [17]  403 	call	_cpct_scanKeyboard_f
-   0166 21 00 02      [10]  404 	ld	hl,#0x0200
-   0169 CDr00r00      [17]  405 	call	_cpct_isKeyPressed
-   016C D1            [10]  406 	pop	de
-   016D 7D            [ 4]  407 	ld	a,l
-   016E B7            [ 4]  408 	or	a, a
-   016F 28 1B         [12]  409 	jr	Z,00105$
-   0171 DD 6E FE      [19]  410 	ld	l,-2 (ix)
-   0174 DD 66 FF      [19]  411 	ld	h,-1 (ix)
-   0177 4E            [ 7]  412 	ld	c,(hl)
-   0178 79            [ 4]  413 	ld	a,c
-   0179 D6 4D         [ 7]  414 	sub	a, #0x4D
-   017B 30 0F         [12]  415 	jr	NC,00105$
-   017D 0C            [ 4]  416 	inc	c
-   017E DD 6E FE      [19]  417 	ld	l,-2 (ix)
-   0181 DD 66 FF      [19]  418 	ld	h,-1 (ix)
-   0184 71            [ 7]  419 	ld	(hl),c
-   0185 21r02r00      [10]  420 	ld	hl,#_pos_player + 0
-   0188 36 00         [10]  421 	ld	(hl), #0x00
-   018A 18 24         [12]  422 	jr	00106$
-   018C                     423 00105$:
-                            424 ;src/main.c:152: else if (cpct_isKeyPressed(Key_CursorLeft)  && posicionp.x > 0              ) {--posicionp.x; pos_player=1;}
-   018C D5            [11]  425 	push	de
-   018D 21 01 01      [10]  426 	ld	hl,#0x0101
-   0190 CDr00r00      [17]  427 	call	_cpct_isKeyPressed
-   0193 D1            [10]  428 	pop	de
-   0194 7D            [ 4]  429 	ld	a,l
-   0195 B7            [ 4]  430 	or	a, a
-   0196 28 18         [12]  431 	jr	Z,00106$
-   0198 DD 6E FE      [19]  432 	ld	l,-2 (ix)
-   019B DD 66 FF      [19]  433 	ld	h,-1 (ix)
-   019E 4E            [ 7]  434 	ld	c,(hl)
-   019F 79            [ 4]  435 	ld	a,c
-   01A0 B7            [ 4]  436 	or	a, a
-   01A1 28 0D         [12]  437 	jr	Z,00106$
-   01A3 0D            [ 4]  438 	dec	c
-   01A4 DD 6E FE      [19]  439 	ld	l,-2 (ix)
-   01A7 DD 66 FF      [19]  440 	ld	h,-1 (ix)
-   01AA 71            [ 7]  441 	ld	(hl),c
-   01AB 21r02r00      [10]  442 	ld	hl,#_pos_player + 0
-   01AE 36 01         [10]  443 	ld	(hl), #0x01
-   01B0                     444 00106$:
-                            445 ;src/main.c:156: if      (cpct_isKeyPressed(Key_CursorUp)    && posicionp.y > 0  && player_salto==0            ) {player_salto=1;subiendo=1;}
-   01B0 D5            [11]  446 	push	de
-   01B1 21 00 01      [10]  447 	ld	hl,#0x0100
-   01B4 CDr00r00      [17]  448 	call	_cpct_isKeyPressed
-   01B7 45            [ 4]  449 	ld	b,l
-   01B8 D1            [10]  450 	pop	de
-                            451 ;src/main.c:126: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
-   01B9 1A            [ 7]  452 	ld	a,(de)
-   01BA 4F            [ 4]  453 	ld	c,a
-                            454 ;src/main.c:156: if      (cpct_isKeyPressed(Key_CursorUp)    && posicionp.y > 0  && player_salto==0            ) {player_salto=1;subiendo=1;}
-   01BB 78            [ 4]  455 	ld	a,b
-   01BC B7            [ 4]  456 	or	a, a
-   01BD 28 14         [12]  457 	jr	Z,00109$
-   01BF 79            [ 4]  458 	ld	a,c
-   01C0 B7            [ 4]  459 	or	a, a
-   01C1 28 10         [12]  460 	jr	Z,00109$
-   01C3 3Ar00r00      [13]  461 	ld	a,(#_player_salto + 0)
-   01C6 B7            [ 4]  462 	or	a, a
-   01C7 20 0A         [12]  463 	jr	NZ,00109$
-   01C9 21r00r00      [10]  464 	ld	hl,#_player_salto + 0
-   01CC 36 01         [10]  465 	ld	(hl), #0x01
-   01CE 21r01r00      [10]  466 	ld	hl,#_subiendo + 0
-   01D1 36 01         [10]  467 	ld	(hl), #0x01
-   01D3                     468 00109$:
-                            469 ;src/main.c:159: if(player_salto>0)//está saltando , cuando player_salto==
-   01D3 3Ar00r00      [13]  470 	ld	a,(#_player_salto + 0)
-   01D6 B7            [ 4]  471 	or	a, a
-   01D7 28 33         [12]  472 	jr	Z,00121$
-                            473 ;src/main.c:161: if((player_salto<20) && (subiendo==1))
-   01D9 3Ar00r00      [13]  474 	ld	a,(#_player_salto + 0)
-   01DC D6 14         [ 7]  475 	sub	a, #0x14
-   01DE 30 0D         [12]  476 	jr	NC,00113$
-   01E0 3Ar01r00      [13]  477 	ld	a,(#_subiendo + 0)
-   01E3 3D            [ 4]  478 	dec	a
-   01E4 20 07         [12]  479 	jr	NZ,00113$
-                            480 ;src/main.c:162: {--posicionp.y;
-   01E6 0D            [ 4]  481 	dec	c
-   01E7 79            [ 4]  482 	ld	a,c
-   01E8 12            [ 7]  483 	ld	(de),a
-                            484 ;src/main.c:163: player_salto++;
-   01E9 21r00r00      [10]  485 	ld	hl, #_player_salto+0
-   01EC 34            [11]  486 	inc	(hl)
-   01ED                     487 00113$:
-                            488 ;src/main.c:165: if(player_salto>=20)
-   01ED 3Ar00r00      [13]  489 	ld	a,(#_player_salto + 0)
-   01F0 D6 14         [ 7]  490 	sub	a, #0x14
-   01F2 38 05         [12]  491 	jr	C,00116$
-                            492 ;src/main.c:167: subiendo=0;
-   01F4 21r01r00      [10]  493 	ld	hl,#_subiendo + 0
-   01F7 36 00         [10]  494 	ld	(hl), #0x00
-   01F9                     495 00116$:
-                            496 ;src/main.c:169: if((player_salto>0) && (subiendo==0))
-   01F9 3Ar00r00      [13]  497 	ld	a,(#_player_salto + 0)
-   01FC B7            [ 4]  498 	or	a, a
-   01FD 28 0D         [12]  499 	jr	Z,00121$
-   01FF 3Ar01r00      [13]  500 	ld	a,(#_subiendo + 0)
-   0202 B7            [ 4]  501 	or	a, a
-   0203 20 07         [12]  502 	jr	NZ,00121$
-                            503 ;src/main.c:170: {++posicionp.y;
-   0205 1A            [ 7]  504 	ld	a,(de)
-   0206 3C            [ 4]  505 	inc	a
-   0207 12            [ 7]  506 	ld	(de),a
-                            507 ;src/main.c:171: player_salto--;
-   0208 21r00r00      [10]  508 	ld	hl, #_player_salto+0
-   020B 35            [11]  509 	dec	(hl)
-   020C                     510 00121$:
-                            511 ;src/main.c:178: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
-   020C 1A            [ 7]  512 	ld	a,(de)
-   020D DD 6E FE      [19]  513 	ld	l,-2 (ix)
-   0210 DD 66 FF      [19]  514 	ld	h,-1 (ix)
-   0213 46            [ 7]  515 	ld	b,(hl)
-   0214 D5            [11]  516 	push	de
-   0215 F5            [11]  517 	push	af
-   0216 33            [ 6]  518 	inc	sp
-   0217 C5            [11]  519 	push	bc
-   0218 33            [ 6]  520 	inc	sp
-   0219 21 00 C0      [10]  521 	ld	hl,#0xC000
-   021C E5            [11]  522 	push	hl
-   021D CDr00r00      [17]  523 	call	_cpct_getScreenPtr
-   0220 4D            [ 4]  524 	ld	c,l
-   0221 44            [ 4]  525 	ld	b,h
-   0222 D1            [10]  526 	pop	de
-                            527 ;src/main.c:134: cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
-                            528 ;src/main.c:184: if(pos_player==0)
-   0223 3Ar02r00      [13]  529 	ld	a,(#_pos_player + 0)
-   0226 B7            [ 4]  530 	or	a, a
-   0227 20 11         [12]  531 	jr	NZ,00123$
-                            532 ;src/main.c:186: cpct_drawSpriteMasked(g_tile_mago_simple, pvideomem, SP_W, SP_H);
-   0229 D5            [11]  533 	push	de
-   022A 21 03 10      [10]  534 	ld	hl,#0x1003
-   022D E5            [11]  535 	push	hl
-   022E C5            [11]  536 	push	bc
-   022F 21r1Fr00      [10]  537 	ld	hl,#_g_tile_mago_simple
-   0232 E5            [11]  538 	push	hl
-   0233 CDr00r00      [17]  539 	call	_cpct_drawSpriteMasked
-   0236 D1            [10]  540 	pop	de
-   0237 C3r28r01      [10]  541 	jp	00126$
-   023A                     542 00123$:
-                            543 ;src/main.c:190: cpct_drawSpriteMasked(g_tile_mago_simple_iz, pvideomem, SP_W, SP_H);
-   023A D5            [11]  544 	push	de
-   023B 21 03 10      [10]  545 	ld	hl,#0x1003
-   023E E5            [11]  546 	push	hl
-   023F C5            [11]  547 	push	bc
-   0240 21r7Fr00      [10]  548 	ld	hl,#_g_tile_mago_simple_iz
-   0243 E5            [11]  549 	push	hl
-   0244 CDr00r00      [17]  550 	call	_cpct_drawSpriteMasked
-   0247 D1            [10]  551 	pop	de
-   0248 C3r28r01      [10]  552 	jp	00126$
-                            553 ;src/main.c:198: void fase_1()
-                            554 ;	---------------------------------
-                            555 ; Function fase_1
-                            556 ; ---------------------------------
-   024B                     557 _fase_1::
-                            558 ;src/main.c:201: }
-   024B C9            [10]  559 	ret
-                            560 ;src/main.c:203: void fase_jefe()
-                            561 ;	---------------------------------
-                            562 ; Function fase_jefe
-                            563 ; ---------------------------------
-   024C                     564 _fase_jefe::
-                            565 ;src/main.c:206: }
-   024C C9            [10]  566 	ret
-                            567 	.area _CODE
-                            568 	.area _INITIALIZER
-   0000                     569 __xinit__player_salto:
-   0000 00                  570 	.db #0x00	; 0
-   0001                     571 __xinit__subiendo:
-   0001 00                  572 	.db #0x00	; 0
-   0002                     573 __xinit__pos_player:
-   0002 00                  574 	.db #0x00	; 0
-                            575 	.area _CABS (ABS)
+                             66 	.area _HOME
+                             67 ;--------------------------------------------------------
+                             68 ; code
+                             69 ;--------------------------------------------------------
+                             70 	.area _CODE
+                             71 ;src/main.c:87: void init()
+                             72 ;	---------------------------------
+                             73 ; Function init
+                             74 ; ---------------------------------
+   0000                      75 _init::
+                             76 ;src/main.c:93: cpct_disableFirmware();
+   0000 CDr00r00      [17]   77 	call	_cpct_disableFirmware
+                             78 ;src/main.c:95: cpct_setVideoMode(1);
+   0003 2E 01         [ 7]   79 	ld	l,#0x01
+   0005 CDr00r00      [17]   80 	call	_cpct_setVideoMode
+                             81 ;src/main.c:97: cpct_fw2hw     (g_palette, 4); // Convert our palette from firmware to hardware colours 
+   0008 21 04 00      [10]   82 	ld	hl,#0x0004
+   000B E5            [11]   83 	push	hl
+   000C 21r06r01      [10]   84 	ld	hl,#_g_palette
+   000F E5            [11]   85 	push	hl
+   0010 CDr00r00      [17]   86 	call	_cpct_fw2hw
+                             87 ;src/main.c:98: cpct_setPalette(g_palette, 4); // Set up the hardware palette using hardware colours   
+   0013 21 04 00      [10]   88 	ld	hl,#0x0004
+   0016 E5            [11]   89 	push	hl
+   0017 21r06r01      [10]   90 	ld	hl,#_g_palette
+   001A E5            [11]   91 	push	hl
+   001B CDr00r00      [17]   92 	call	_cpct_setPalette
+                             93 ;src/main.c:99: cpct_setBorder(0);
+   001E 21 10 00      [10]   94 	ld	hl,#0x0010
+   0021 E5            [11]   95 	push	hl
+   0022 CDr00r00      [17]   96 	call	_cpct_setPALColour
+   0025 C9            [10]   97 	ret
+   0026                      98 _g_tile_mago_simple:
+   0026 88                   99 	.db #0x88	; 136
+   0027 07                  100 	.db #0x07	; 7
+   0028 77                  101 	.db #0x77	; 119	'w'
+   0029 08                  102 	.db #0x08	; 8
+   002A FF                  103 	.db #0xFF	; 255
+   002B 00                  104 	.db #0x00	; 0
+   002C 88                  105 	.db #0x88	; 136
+   002D 52                  106 	.db #0x52	; 82	'R'
+   002E 00                  107 	.db #0x00	; 0
+   002F 78                  108 	.db #0x78	; 120	'x'
+   0030 00                  109 	.db #0x00	; 0
+   0031 F0                  110 	.db #0xF0	; 240
+   0032 88                  111 	.db #0x88	; 136
+   0033 61                  112 	.db #0x61	; 97	'a'
+   0034 00                  113 	.db #0x00	; 0
+   0035 A5                  114 	.db #0xA5	; 165
+   0036 11                  115 	.db #0x11	; 17
+   0037 68                  116 	.db #0x68	; 104	'h'
+   0038 88                  117 	.db #0x88	; 136
+   0039 52                  118 	.db #0x52	; 82	'R'
+   003A 00                  119 	.db #0x00	; 0
+   003B 5A                  120 	.db #0x5A	; 90	'Z'
+   003C 33                  121 	.db #0x33	; 51	'3'
+   003D C0                  122 	.db #0xC0	; 192
+   003E 88                  123 	.db #0x88	; 136
+   003F 43                  124 	.db #0x43	; 67	'C'
+   0040 00                  125 	.db #0x00	; 0
+   0041 79                  126 	.db #0x79	; 121	'y'
+   0042 33                  127 	.db #0x33	; 51	'3'
+   0043 C8                  128 	.db #0xC8	; 200
+   0044 CC                  129 	.db #0xCC	; 204
+   0045 21                  130 	.db #0x21	; 33
+   0046 00                  131 	.db #0x00	; 0
+   0047 F6                  132 	.db #0xF6	; 246
+   0048 11                  133 	.db #0x11	; 17
+   0049 EC                  134 	.db #0xEC	; 236
+   004A 88                  135 	.db #0x88	; 136
+   004B 70                  136 	.db #0x70	; 112	'p'
+   004C 00                  137 	.db #0x00	; 0
+   004D F6                  138 	.db #0xF6	; 246
+   004E 11                  139 	.db #0x11	; 17
+   004F EC                  140 	.db #0xEC	; 236
+   0050 22                  141 	.db #0x22	; 34
+   0051 D0                  142 	.db #0xD0	; 208
+   0052 00                  143 	.db #0x00	; 0
+   0053 FF                  144 	.db #0xFF	; 255
+   0054 33                  145 	.db #0x33	; 51	'3'
+   0055 C0                  146 	.db #0xC0	; 192
+   0056 EE                  147 	.db #0xEE	; 238
+   0057 10                  148 	.db #0x10	; 16
+   0058 00                  149 	.db #0x00	; 0
+   0059 F0                  150 	.db #0xF0	; 240
+   005A 11                  151 	.db #0x11	; 17
+   005B E0                  152 	.db #0xE0	; 224
+   005C EE                  153 	.db #0xEE	; 238
+   005D 10                  154 	.db #0x10	; 16
+   005E 00                  155 	.db #0x00	; 0
+   005F 0F                  156 	.db #0x0F	; 15
+   0060 11                  157 	.db #0x11	; 17
+   0061 2C                  158 	.db #0x2C	; 44
+   0062 CC                  159 	.db #0xCC	; 204
+   0063 21                  160 	.db #0x21	; 33
+   0064 00                  161 	.db #0x00	; 0
+   0065 A5                  162 	.db #0xA5	; 165
+   0066 00                  163 	.db #0x00	; 0
+   0067 F2                  164 	.db #0xF2	; 242
+   0068 CC                  165 	.db #0xCC	; 204
+   0069 30                  166 	.db #0x30	; 48	'0'
+   006A 00                  167 	.db #0x00	; 0
+   006B 5A                  168 	.db #0x5A	; 90	'Z'
+   006C 11                  169 	.db #0x11	; 17
+   006D EC                  170 	.db #0xEC	; 236
+   006E CC                  171 	.db #0xCC	; 204
+   006F 21                  172 	.db #0x21	; 33
+   0070 00                  173 	.db #0x00	; 0
+   0071 F3                  174 	.db #0xF3	; 243
+   0072 11                  175 	.db #0x11	; 17
+   0073 E0                  176 	.db #0xE0	; 224
+   0074 88                  177 	.db #0x88	; 136
+   0075 52                  178 	.db #0x52	; 82	'R'
+   0076 00                  179 	.db #0x00	; 0
+   0077 96                  180 	.db #0x96	; 150
+   0078 11                  181 	.db #0x11	; 17
+   0079 68                  182 	.db #0x68	; 104	'h'
+   007A 88                  183 	.db #0x88	; 136
+   007B 70                  184 	.db #0x70	; 112	'p'
+   007C 00                  185 	.db #0x00	; 0
+   007D F0                  186 	.db #0xF0	; 240
+   007E 00                  187 	.db #0x00	; 0
+   007F F0                  188 	.db #0xF0	; 240
+   0080 CC                  189 	.db #0xCC	; 204
+   0081 30                  190 	.db #0x30	; 48	'0'
+   0082 33                  191 	.db #0x33	; 51	'3'
+   0083 C0                  192 	.db #0xC0	; 192
+   0084 00                  193 	.db #0x00	; 0
+   0085 F0                  194 	.db #0xF0	; 240
+   0086                     195 _g_tile_mago_simple_iz:
+   0086 FF                  196 	.db #0xFF	; 255
+   0087 00                  197 	.db #0x00	; 0
+   0088 EE                  198 	.db #0xEE	; 238
+   0089 10                  199 	.db #0x10	; 16
+   008A 11                  200 	.db #0x11	; 17
+   008B E0                  201 	.db #0xE0	; 224
+   008C 00                  202 	.db #0x00	; 0
+   008D F0                  203 	.db #0xF0	; 240
+   008E 00                  204 	.db #0x00	; 0
+   008F E1                  205 	.db #0xE1	; 225
+   0090 11                  206 	.db #0x11	; 17
+   0091 A4                  207 	.db #0xA4	; 164
+   0092 88                  208 	.db #0x88	; 136
+   0093 61                  209 	.db #0x61	; 97	'a'
+   0094 00                  210 	.db #0x00	; 0
+   0095 5A                  211 	.db #0x5A	; 90	'Z'
+   0096 11                  212 	.db #0x11	; 17
+   0097 68                  213 	.db #0x68	; 104	'h'
+   0098 CC                  214 	.db #0xCC	; 204
+   0099 30                  215 	.db #0x30	; 48	'0'
+   009A 00                  216 	.db #0x00	; 0
+   009B A5                  217 	.db #0xA5	; 165
+   009C 11                  218 	.db #0x11	; 17
+   009D A4                  219 	.db #0xA4	; 164
+   009E CC                  220 	.db #0xCC	; 204
+   009F 21                  221 	.db #0x21	; 33
+   00A0 00                  222 	.db #0x00	; 0
+   00A1 69                  223 	.db #0x69	; 105	'i'
+   00A2 11                  224 	.db #0x11	; 17
+   00A3 2C                  225 	.db #0x2C	; 44
+   00A4 88                  226 	.db #0x88	; 136
+   00A5 43                  227 	.db #0x43	; 67	'C'
+   00A6 00                  228 	.db #0x00	; 0
+   00A7 96                  229 	.db #0x96	; 150
+   00A8 33                  230 	.db #0x33	; 51	'3'
+   00A9 48                  231 	.db #0x48	; 72	'H'
+   00AA 88                  232 	.db #0x88	; 136
+   00AB 43                  233 	.db #0x43	; 67	'C'
+   00AC 00                  234 	.db #0x00	; 0
+   00AD 96                  235 	.db #0x96	; 150
+   00AE 11                  236 	.db #0x11	; 17
+   00AF E0                  237 	.db #0xE0	; 224
+   00B0 CC                  238 	.db #0xCC	; 204
+   00B1 30                  239 	.db #0x30	; 48	'0'
+   00B2 00                  240 	.db #0x00	; 0
+   00B3 0F                  241 	.db #0x0F	; 15
+   00B4 44                  242 	.db #0x44	; 68	'D'
+   00B5 B0                  243 	.db #0xB0	; 176
+   00B6 88                  244 	.db #0x88	; 136
+   00B7 70                  245 	.db #0x70	; 112	'p'
+   00B8 00                  246 	.db #0x00	; 0
+   00B9 F0                  247 	.db #0xF0	; 240
+   00BA 77                  248 	.db #0x77	; 119	'w'
+   00BB 80                  249 	.db #0x80	; 128
+   00BC 88                  250 	.db #0x88	; 136
+   00BD 43                  251 	.db #0x43	; 67	'C'
+   00BE 00                  252 	.db #0x00	; 0
+   00BF 0F                  253 	.db #0x0F	; 15
+   00C0 77                  254 	.db #0x77	; 119	'w'
+   00C1 80                  255 	.db #0x80	; 128
+   00C2 00                  256 	.db #0x00	; 0
+   00C3 F0                  257 	.db #0xF0	; 240
+   00C4 00                  258 	.db #0x00	; 0
+   00C5 5A                  259 	.db #0x5A	; 90	'Z'
+   00C6 33                  260 	.db #0x33	; 51	'3'
+   00C7 48                  261 	.db #0x48	; 72	'H'
+   00C8 88                  262 	.db #0x88	; 136
+   00C9 70                  263 	.db #0x70	; 112	'p'
+   00CA 00                  264 	.db #0x00	; 0
+   00CB A5                  265 	.db #0xA5	; 165
+   00CC 33                  266 	.db #0x33	; 51	'3'
+   00CD C0                  267 	.db #0xC0	; 192
+   00CE 88                  268 	.db #0x88	; 136
+   00CF 70                  269 	.db #0x70	; 112	'p'
+   00D0 00                  270 	.db #0x00	; 0
+   00D1 B4                  271 	.db #0xB4	; 180
+   00D2 33                  272 	.db #0x33	; 51	'3'
+   00D3 48                  273 	.db #0x48	; 72	'H'
+   00D4 88                  274 	.db #0x88	; 136
+   00D5 61                  275 	.db #0x61	; 97	'a'
+   00D6 00                  276 	.db #0x00	; 0
+   00D7 96                  277 	.db #0x96	; 150
+   00D8 11                  278 	.db #0x11	; 17
+   00D9 A4                  279 	.db #0xA4	; 164
+   00DA 00                  280 	.db #0x00	; 0
+   00DB F0                  281 	.db #0xF0	; 240
+   00DC 00                  282 	.db #0x00	; 0
+   00DD F0                  283 	.db #0xF0	; 240
+   00DE 11                  284 	.db #0x11	; 17
+   00DF E0                  285 	.db #0xE0	; 224
+   00E0 00                  286 	.db #0x00	; 0
+   00E1 F0                  287 	.db #0xF0	; 240
+   00E2 CC                  288 	.db #0xCC	; 204
+   00E3 30                  289 	.db #0x30	; 48	'0'
+   00E4 33                  290 	.db #0x33	; 51	'3'
+   00E5 C0                  291 	.db #0xC0	; 192
+   00E6                     292 _g_tile_block:
+   00E6 0F                  293 	.db #0x0F	; 15
+   00E7 0F                  294 	.db #0x0F	; 15
+   00E8 0F                  295 	.db #0x0F	; 15
+   00E9 0F                  296 	.db #0x0F	; 15
+   00EA 0F                  297 	.db #0x0F	; 15
+   00EB 0F                  298 	.db #0x0F	; 15
+   00EC 0F                  299 	.db #0x0F	; 15
+   00ED 0F                  300 	.db #0x0F	; 15
+   00EE 0F                  301 	.db #0x0F	; 15
+   00EF 0F                  302 	.db #0x0F	; 15
+   00F0 0F                  303 	.db #0x0F	; 15
+   00F1 0F                  304 	.db #0x0F	; 15
+   00F2 0F                  305 	.db #0x0F	; 15
+   00F3 0F                  306 	.db #0x0F	; 15
+   00F4 0F                  307 	.db #0x0F	; 15
+   00F5 0F                  308 	.db #0x0F	; 15
+   00F6 0F                  309 	.db #0x0F	; 15
+   00F7 0F                  310 	.db #0x0F	; 15
+   00F8 0F                  311 	.db #0x0F	; 15
+   00F9 0F                  312 	.db #0x0F	; 15
+   00FA 0F                  313 	.db #0x0F	; 15
+   00FB 0F                  314 	.db #0x0F	; 15
+   00FC 0F                  315 	.db #0x0F	; 15
+   00FD 0F                  316 	.db #0x0F	; 15
+   00FE 0F                  317 	.db #0x0F	; 15
+   00FF 0F                  318 	.db #0x0F	; 15
+   0100 0F                  319 	.db #0x0F	; 15
+   0101 0F                  320 	.db #0x0F	; 15
+   0102 0F                  321 	.db #0x0F	; 15
+   0103 0F                  322 	.db #0x0F	; 15
+   0104 0F                  323 	.db #0x0F	; 15
+   0105 0F                  324 	.db #0x0F	; 15
+   0106                     325 _g_palette:
+   0106 0A                  326 	.db #0x0A	; 10
+   0107 02                  327 	.db #0x02	; 2
+   0108 17                  328 	.db #0x17	; 23
+   0109 1A                  329 	.db #0x1A	; 26
+                            330 ;src/main.c:104: void pantalla_start()
+                            331 ;	---------------------------------
+                            332 ; Function pantalla_start
+                            333 ; ---------------------------------
+   010A                     334 _pantalla_start::
+                            335 ;src/main.c:111: }
+   010A C9            [10]  336 	ret
+                            337 ;src/main.c:115: void main(void) {
+                            338 ;	---------------------------------
+                            339 ; Function main
+                            340 ; ---------------------------------
+   010B                     341 _main::
+   010B DD E5         [15]  342 	push	ix
+   010D DD 21 00 00   [14]  343 	ld	ix,#0
+   0111 DD 39         [15]  344 	add	ix,sp
+   0113 F5            [11]  345 	push	af
+   0114 F5            [11]  346 	push	af
+                            347 ;src/main.c:116: Tplayer posicionp={0,100};
+   0115 21 00 00      [10]  348 	ld	hl,#0x0000
+   0118 39            [11]  349 	add	hl,sp
+   0119 36 00         [10]  350 	ld	(hl),#0x00
+   011B 21 00 00      [10]  351 	ld	hl,#0x0000
+   011E 39            [11]  352 	add	hl,sp
+   011F DD 75 FE      [19]  353 	ld	-2 (ix),l
+   0122 DD 74 FF      [19]  354 	ld	-1 (ix),h
+   0125 EB            [ 4]  355 	ex	de,hl
+   0126 13            [ 6]  356 	inc	de
+   0127 3E 64         [ 7]  357 	ld	a,#0x64
+   0129 12            [ 7]  358 	ld	(de),a
+                            359 ;src/main.c:119: init();
+   012A D5            [11]  360 	push	de
+   012B CDr00r00      [17]  361 	call	_init
+   012E D1            [10]  362 	pop	de
+                            363 ;src/main.c:125: while(1) {
+   012F                     364 00126$:
+                            365 ;src/main.c:126: cpct_waitVSYNC ();//esperamos a que haya recorrido la pantalla
+   012F D5            [11]  366 	push	de
+   0130 CDr00r00      [17]  367 	call	_cpct_waitVSYNC
+   0133 D1            [10]  368 	pop	de
+                            369 ;src/main.c:127: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+   0134 1A            [ 7]  370 	ld	a,(de)
+   0135 DD 6E FE      [19]  371 	ld	l,-2 (ix)
+   0138 DD 66 FF      [19]  372 	ld	h,-1 (ix)
+   013B 46            [ 7]  373 	ld	b,(hl)
+   013C D5            [11]  374 	push	de
+   013D F5            [11]  375 	push	af
+   013E 33            [ 6]  376 	inc	sp
+   013F C5            [11]  377 	push	bc
+   0140 33            [ 6]  378 	inc	sp
+   0141 21 00 C0      [10]  379 	ld	hl,#0xC000
+   0144 E5            [11]  380 	push	hl
+   0145 CDr00r00      [17]  381 	call	_cpct_getScreenPtr
+   0148 4D            [ 4]  382 	ld	c,l
+   0149 44            [ 4]  383 	ld	b,h
+   014A 21 03 10      [10]  384 	ld	hl,#0x1003
+   014D E5            [11]  385 	push	hl
+   014E AF            [ 4]  386 	xor	a, a
+   014F F5            [11]  387 	push	af
+   0150 33            [ 6]  388 	inc	sp
+   0151 C5            [11]  389 	push	bc
+   0152 CDr00r00      [17]  390 	call	_cpct_drawSolidBox
+   0155 F1            [10]  391 	pop	af
+   0156 F1            [10]  392 	pop	af
+   0157 33            [ 6]  393 	inc	sp
+   0158 CDr00r00      [17]  394 	call	_cpct_scanKeyboard_f
+   015B 21 00 02      [10]  395 	ld	hl,#0x0200
+   015E CDr00r00      [17]  396 	call	_cpct_isKeyPressed
+   0161 D1            [10]  397 	pop	de
+   0162 7D            [ 4]  398 	ld	a,l
+   0163 B7            [ 4]  399 	or	a, a
+   0164 28 1B         [12]  400 	jr	Z,00105$
+   0166 DD 6E FE      [19]  401 	ld	l,-2 (ix)
+   0169 DD 66 FF      [19]  402 	ld	h,-1 (ix)
+   016C 4E            [ 7]  403 	ld	c,(hl)
+   016D 79            [ 4]  404 	ld	a,c
+   016E D6 4D         [ 7]  405 	sub	a, #0x4D
+   0170 30 0F         [12]  406 	jr	NC,00105$
+   0172 0C            [ 4]  407 	inc	c
+   0173 DD 6E FE      [19]  408 	ld	l,-2 (ix)
+   0176 DD 66 FF      [19]  409 	ld	h,-1 (ix)
+   0179 71            [ 7]  410 	ld	(hl),c
+   017A 21r02r00      [10]  411 	ld	hl,#_pos_player + 0
+   017D 36 00         [10]  412 	ld	(hl), #0x00
+   017F 18 24         [12]  413 	jr	00106$
+   0181                     414 00105$:
+                            415 ;src/main.c:153: else if (cpct_isKeyPressed(Key_CursorLeft)  && posicionp.x > 0              ) {--posicionp.x; pos_player=1;}
+   0181 D5            [11]  416 	push	de
+   0182 21 01 01      [10]  417 	ld	hl,#0x0101
+   0185 CDr00r00      [17]  418 	call	_cpct_isKeyPressed
+   0188 D1            [10]  419 	pop	de
+   0189 7D            [ 4]  420 	ld	a,l
+   018A B7            [ 4]  421 	or	a, a
+   018B 28 18         [12]  422 	jr	Z,00106$
+   018D DD 6E FE      [19]  423 	ld	l,-2 (ix)
+   0190 DD 66 FF      [19]  424 	ld	h,-1 (ix)
+   0193 4E            [ 7]  425 	ld	c,(hl)
+   0194 79            [ 4]  426 	ld	a,c
+   0195 B7            [ 4]  427 	or	a, a
+   0196 28 0D         [12]  428 	jr	Z,00106$
+   0198 0D            [ 4]  429 	dec	c
+   0199 DD 6E FE      [19]  430 	ld	l,-2 (ix)
+   019C DD 66 FF      [19]  431 	ld	h,-1 (ix)
+   019F 71            [ 7]  432 	ld	(hl),c
+   01A0 21r02r00      [10]  433 	ld	hl,#_pos_player + 0
+   01A3 36 01         [10]  434 	ld	(hl), #0x01
+   01A5                     435 00106$:
+                            436 ;src/main.c:157: if      (cpct_isKeyPressed(Key_CursorUp)    && posicionp.y > 0  && player_salto==0            ) {player_salto=1;subiendo=1;}
+   01A5 D5            [11]  437 	push	de
+   01A6 21 00 01      [10]  438 	ld	hl,#0x0100
+   01A9 CDr00r00      [17]  439 	call	_cpct_isKeyPressed
+   01AC 45            [ 4]  440 	ld	b,l
+   01AD D1            [10]  441 	pop	de
+                            442 ;src/main.c:127: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+   01AE 1A            [ 7]  443 	ld	a,(de)
+   01AF 4F            [ 4]  444 	ld	c,a
+                            445 ;src/main.c:157: if      (cpct_isKeyPressed(Key_CursorUp)    && posicionp.y > 0  && player_salto==0            ) {player_salto=1;subiendo=1;}
+   01B0 78            [ 4]  446 	ld	a,b
+   01B1 B7            [ 4]  447 	or	a, a
+   01B2 28 14         [12]  448 	jr	Z,00109$
+   01B4 79            [ 4]  449 	ld	a,c
+   01B5 B7            [ 4]  450 	or	a, a
+   01B6 28 10         [12]  451 	jr	Z,00109$
+   01B8 3Ar00r00      [13]  452 	ld	a,(#_player_salto + 0)
+   01BB B7            [ 4]  453 	or	a, a
+   01BC 20 0A         [12]  454 	jr	NZ,00109$
+   01BE 21r00r00      [10]  455 	ld	hl,#_player_salto + 0
+   01C1 36 01         [10]  456 	ld	(hl), #0x01
+   01C3 21r01r00      [10]  457 	ld	hl,#_subiendo + 0
+   01C6 36 01         [10]  458 	ld	(hl), #0x01
+   01C8                     459 00109$:
+                            460 ;src/main.c:160: if(player_salto>0)//está saltando , cuando player_salto==
+   01C8 3Ar00r00      [13]  461 	ld	a,(#_player_salto + 0)
+   01CB B7            [ 4]  462 	or	a, a
+   01CC 28 33         [12]  463 	jr	Z,00121$
+                            464 ;src/main.c:162: if((player_salto<20) && (subiendo==1))
+   01CE 3Ar00r00      [13]  465 	ld	a,(#_player_salto + 0)
+   01D1 D6 14         [ 7]  466 	sub	a, #0x14
+   01D3 30 0D         [12]  467 	jr	NC,00113$
+   01D5 3Ar01r00      [13]  468 	ld	a,(#_subiendo + 0)
+   01D8 3D            [ 4]  469 	dec	a
+   01D9 20 07         [12]  470 	jr	NZ,00113$
+                            471 ;src/main.c:163: {--posicionp.y;
+   01DB 0D            [ 4]  472 	dec	c
+   01DC 79            [ 4]  473 	ld	a,c
+   01DD 12            [ 7]  474 	ld	(de),a
+                            475 ;src/main.c:164: player_salto++;
+   01DE 21r00r00      [10]  476 	ld	hl, #_player_salto+0
+   01E1 34            [11]  477 	inc	(hl)
+   01E2                     478 00113$:
+                            479 ;src/main.c:166: if(player_salto>=20)
+   01E2 3Ar00r00      [13]  480 	ld	a,(#_player_salto + 0)
+   01E5 D6 14         [ 7]  481 	sub	a, #0x14
+   01E7 38 05         [12]  482 	jr	C,00116$
+                            483 ;src/main.c:168: subiendo=0;
+   01E9 21r01r00      [10]  484 	ld	hl,#_subiendo + 0
+   01EC 36 00         [10]  485 	ld	(hl), #0x00
+   01EE                     486 00116$:
+                            487 ;src/main.c:170: if((player_salto>0) && (subiendo==0))
+   01EE 3Ar00r00      [13]  488 	ld	a,(#_player_salto + 0)
+   01F1 B7            [ 4]  489 	or	a, a
+   01F2 28 0D         [12]  490 	jr	Z,00121$
+   01F4 3Ar01r00      [13]  491 	ld	a,(#_subiendo + 0)
+   01F7 B7            [ 4]  492 	or	a, a
+   01F8 20 07         [12]  493 	jr	NZ,00121$
+                            494 ;src/main.c:171: {++posicionp.y;
+   01FA 1A            [ 7]  495 	ld	a,(de)
+   01FB 3C            [ 4]  496 	inc	a
+   01FC 12            [ 7]  497 	ld	(de),a
+                            498 ;src/main.c:172: player_salto--;
+   01FD 21r00r00      [10]  499 	ld	hl, #_player_salto+0
+   0200 35            [11]  500 	dec	(hl)
+   0201                     501 00121$:
+                            502 ;src/main.c:179: pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+   0201 1A            [ 7]  503 	ld	a,(de)
+   0202 DD 6E FE      [19]  504 	ld	l,-2 (ix)
+   0205 DD 66 FF      [19]  505 	ld	h,-1 (ix)
+   0208 46            [ 7]  506 	ld	b,(hl)
+   0209 D5            [11]  507 	push	de
+   020A F5            [11]  508 	push	af
+   020B 33            [ 6]  509 	inc	sp
+   020C C5            [11]  510 	push	bc
+   020D 33            [ 6]  511 	inc	sp
+   020E 21 00 C0      [10]  512 	ld	hl,#0xC000
+   0211 E5            [11]  513 	push	hl
+   0212 CDr00r00      [17]  514 	call	_cpct_getScreenPtr
+   0215 4D            [ 4]  515 	ld	c,l
+   0216 44            [ 4]  516 	ld	b,h
+   0217 D1            [10]  517 	pop	de
+                            518 ;src/main.c:135: cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
+                            519 ;src/main.c:185: if(pos_player==0)
+   0218 3Ar02r00      [13]  520 	ld	a,(#_pos_player + 0)
+   021B B7            [ 4]  521 	or	a, a
+   021C 20 11         [12]  522 	jr	NZ,00123$
+                            523 ;src/main.c:187: cpct_drawSpriteMasked(g_tile_mago_simple, pvideomem, SP_W, SP_H);
+   021E D5            [11]  524 	push	de
+   021F 21 03 10      [10]  525 	ld	hl,#0x1003
+   0222 E5            [11]  526 	push	hl
+   0223 C5            [11]  527 	push	bc
+   0224 21r26r00      [10]  528 	ld	hl,#_g_tile_mago_simple
+   0227 E5            [11]  529 	push	hl
+   0228 CDr00r00      [17]  530 	call	_cpct_drawSpriteMasked
+   022B D1            [10]  531 	pop	de
+   022C C3r2Fr01      [10]  532 	jp	00126$
+   022F                     533 00123$:
+                            534 ;src/main.c:191: cpct_drawSpriteMasked(g_tile_mago_simple_iz, pvideomem, SP_W, SP_H);
+   022F D5            [11]  535 	push	de
+   0230 21 03 10      [10]  536 	ld	hl,#0x1003
+   0233 E5            [11]  537 	push	hl
+   0234 C5            [11]  538 	push	bc
+   0235 21r86r00      [10]  539 	ld	hl,#_g_tile_mago_simple_iz
+   0238 E5            [11]  540 	push	hl
+   0239 CDr00r00      [17]  541 	call	_cpct_drawSpriteMasked
+   023C D1            [10]  542 	pop	de
+   023D C3r2Fr01      [10]  543 	jp	00126$
+                            544 ;src/main.c:199: void fase_1()
+                            545 ;	---------------------------------
+                            546 ; Function fase_1
+                            547 ; ---------------------------------
+   0240                     548 _fase_1::
+                            549 ;src/main.c:202: }
+   0240 C9            [10]  550 	ret
+                            551 ;src/main.c:204: void fase_jefe()
+                            552 ;	---------------------------------
+                            553 ; Function fase_jefe
+                            554 ; ---------------------------------
+   0241                     555 _fase_jefe::
+                            556 ;src/main.c:207: }
+   0241 C9            [10]  557 	ret
+                            558 	.area _CODE
+                            559 	.area _INITIALIZER
+   0000                     560 __xinit__player_salto:
+   0000 00                  561 	.db #0x00	; 0
+   0001                     562 __xinit__subiendo:
+   0001 00                  563 	.db #0x00	; 0
+   0002                     564 __xinit__pos_player:
+   0002 00                  565 	.db #0x00	; 0
+                            566 	.area _CABS (ABS)
