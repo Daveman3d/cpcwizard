@@ -135,7 +135,7 @@ void main(void) {
       cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
 
       //pintamos el escenario
-     cpct_drawSpriteMasked(g_tile_block, pvideomem, 0, 0);
+     //cpct_drawSpriteMasked(g_tile_block, pvideomem, 0, 0);
 
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of
