@@ -114,7 +114,9 @@ void pantalla_start()
 //codigo principal del juego, en el momento que perdamos volvemos a la función pantalla_start()
 void main(void) {
    Tplayer posicionp={0,100};
+   //Tscene posicion={0,50}
    u8* pvideomem;
+   u8* scenevideomem;
    u8* pvideomback;
   init();
  // Draw the sprite in the video memory location got from coordinates x, y
@@ -125,6 +127,7 @@ void main(void) {
    while(1) {
       cpct_waitVSYNC ();//esperamos a que haya recorrido la pantalla
       pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+	  scenevideomem=cpct_getScreenPtr(VMEM,0,0);
      /*
       //para solo repintar cuando haya un cambio
       if(pvideomem!=pvideomback)
@@ -134,8 +137,8 @@ void main(void) {
       }*/
       cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
 
-      //pintamos el escenario
-     //cpct_drawSpriteMasked(g_tile_block, pvideomem, 0, 0);
+      //pintamos el escenario, el bloque en el que se mueve el protagonista
+		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 16, 8);
 
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of
