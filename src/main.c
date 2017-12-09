@@ -117,7 +117,7 @@ void main(void) {
    //Tscene posicion={0,50}
    u8* pvideomem;
    u8* scenevideomem;
-   u8* pvideomback;
+   //u8* pvideomback;
   init();
  // Draw the sprite in the video memory location got from coordinates x, y
    //   cpct_drawSprite(g_tile_mago_simple, VMEM, SP_W, SP_H);
@@ -138,8 +138,8 @@ void main(void) {
       cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
 
       //pintamos el escenario, el bloque en el que se mueve el protagonista
-//		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 16, 8);
-		cpct_etm_drawTilemap2x4 (100, 8, SCR, g_tile_block)
+		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 8, 8);
+		//cpct_etm_drawTilemap2x4 (100, 8, SCR, g_tile_block);
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of
       // every key before checking each individual key's status.
@@ -175,7 +175,7 @@ void main(void) {
 			player_salto--;
 		  }
 	  }
-		  //dibujamos mago agachaco/abajo
+		  //dibujamos mago agachado/abajo
 		  //else if (cpct_isKeyPressed(Key_CursorDown)  && posicionp.y < (SCR_H - SP_H) ) {++posicionp.y;}
 	  
       // Get video memory byte for coordinates x, y of the sprite (in bytes)

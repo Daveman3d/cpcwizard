@@ -5,6 +5,7 @@ Para crear alias de comandos usamos alias
 ejemplo
 alias do="cpct_winape *dsk"
 
+para compilar en el directorio del proyecto ejecutamos make
 para convertir imagenes
 m es el modo
 tw es el ancho del pixel
@@ -21,6 +22,7 @@ mode 2	1 byte = 8 pixels
 en alto es igual 1 byte=1 pixel
 
 cpct_img2tileset -m 0 -tw 12 -th 16 -pf {0 2 23 26} -im 0 mago_simple.png
+ cpct_img2tileset -m 1 -tw 12 -th 16 -pf {0 2 23 26} -im mago_simple.png
 
 Tenemos que pasarle la información de la mascara para que no nos salga el color de fondo
 -------

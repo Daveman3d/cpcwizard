@@ -3,9 +3,10 @@
 #define _BLOCK_H_
 
 #include <types.h>
-
 extern u8* const g_tile_tileset[1];
 
-extern const u8 g_tile_block[32];
+#define G_TILE_BLOCK_W 4
+#define G_TILE_BLOCK_H 8
+extern const u8 g_tile_block[2 * 4 * 8];
 
 #endif
