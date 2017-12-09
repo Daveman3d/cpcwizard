@@ -138,8 +138,8 @@ void main(void) {
       cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
 
       //pintamos el escenario, el bloque en el que se mueve el protagonista
-		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 16, 8);
-
+//		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 16, 8);
+		cpct_etm_drawTilemap2x4 (100, 8, SCR, g_tile_block)
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of
       // every key before checking each individual key's status.
