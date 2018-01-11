@@ -55,10 +55,10 @@ void main(void) {
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
-
+#include <stdio.h>
 #include <cpctelera.h>
 #include "mago_simple.c"
-
+#include <string.h>
 // Sprite size (in bytes)
 #define SP_W   3
 #define SP_H   16
@@ -66,6 +66,13 @@ void main(void) {
 // Screen size (in bytes)
 #define SCR_W   80
 #define SCR_H  200
+
+//definimos propiedades del disparo
+u8 disparo=0;//por defecto no está disparando 
+typedef struct 
+{ u8 x, y;//posicion del player
+   
+} Tdisparo;//por defecto no hay disparo , pero en el momento que pulse deberemos crear una instancia de disparo y dejarla activa hasta que desaparezca
 
 //definimos el comienzo de la memoria de video
 #define VMEM (u8*)0xC000
@@ -117,6 +124,11 @@ void main(void) {
    //Tscene posicion={0,50}
    u8* pvideomem;
    u8* scenevideomem;
+   u8* debugmem;
+   char debugtext[16]; // texto de debug
+   u8 valorx=0;
+   u8 valory=0;
+   u8 i;
    //u8* pvideomback;
   init();
  // Draw the sprite in the video memory location got from coordinates x, y
@@ -127,7 +139,8 @@ void main(void) {
    while(1) {
       cpct_waitVSYNC ();//esperamos a que haya recorrido la pantalla
       pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
-	  scenevideomem=cpct_getScreenPtr(VMEM,0,0);
+	//  scenevideomem=cpct_getScreenPtr(VMEM,0,116);
+	  debugmem = cpct_getScreenPtr(VMEM,32,0);
      /*
       //para solo repintar cuando haya un cambio
       if(pvideomem!=pvideomback)
@@ -135,10 +148,89 @@ void main(void) {
          cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);
          pvideomback=pvideomem;
       }*/
-      cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
-
+	   // sprintf(debugtext, "%10u", (strcat(strcat("X:",posicionp.x),strcat("Y:",posicionp.y))));
+	/*   debugtext="";
+	   strcat(debugtext,"X:");
+	      strcat(debugtext,castposicionp.x);
+		  strcat(debugtext,"Y:");
+		  strcat(debugtext,(u8)posicionp.y);*/
+		
+		cpct_drawSolidBox(pvideomem,0, SP_W, SP_H);//dibujamos un recuadro negro para limpiar la pantalla
+	  
+	 
+		//	  ;  //incluimos esta funcion que transforma el texto y lo mete en la variable para poder mostrarlo por pantalla
       //pintamos el escenario, el bloque en el que se mueve el protagonista
-		cpct_drawSpriteMasked(g_tile_block, scenevideomem, 8, 8);
+		//cpct_drawSprite(g_tile_block, scenevideomem, 2, 8);//el ancho es en bytes y se multiplica por 4 para el modo 1
+		//cpct_drawTileAligned2x8(g_tile_block,  scenevideomem);
+//dibujamos las plataformas
+	for(i=0; i < 192; i += 8) {
+		//cargamos mapa de tiles
+		//cargamos mapa de durezas
+		//mostramos mapa de tiles
+		//las tiles completamos las cargamos solo una vez, luego solo modificaríamos las tiles donde va el personaje, o hay enemigos
+		//o hay animaciones
+      scenevideomem = cpct_getScreenPtr(VMEM, i, 116);//empieza en X=0 Y=116 que es debajo del jugador
+	  cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);  //lo seleccionamos la caja de tiles en cuestión
+      cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);       
+   }
+   
+   /***************************************************************************************************/
+   //Cargaríamos mapa de tiles
+   //Cargariamos mapa de tiles con colisión
+   //al mover el personaje comprobariamos que la posición a la que va no sea solida
+   //if derecha , comprobamos si al ir a la derecha el tile derecho es traspasable
+   //if izquierda , comprobamos si al ir a la izquierda puede avanzar
+   //if salto, si salta comprobamos que el tile de arriba y derecho son  traspasables y se pueden pasar
+   //if abajo //siempre comprobamos si el tile de abajo es solido, sino se caería hacia abajo
+   //comprobación constante 
+   //pesudocódigo
+	/* 
+	//abajo sería la gravedad , por lo que es necesario comprobarla siempre
+		//comprobamos posición del jugador en el eje y
+			//comprobamos mapa de durezas de arriba si no es solido				
+			if((posiciontile.y-(posicionp.y(posición y del jugador)+tamaño sprite)>1)
+			{//caemos}
+	if(pulsa tecla) //puede ser arriba, izquierda o derecha o podría pulsar arriba-izquierda, y arriba-derecha
+	//si es la tecla de disparo debemos seguir el disparo y comprobar si choca con algún obstaculo
+	{
+		if(arriba)
+		{
+			//comprobamos posición del jugador en el eje y
+			//comprobamos mapa de durezas de arriba si es sólido
+			if((posiciontile.y-(posicionp.y(posición y del jugador)+tamaño sprite)>1)
+			{//saltamos}
+		}
+		if(derecha)
+		{
+			//comprobamos posición del jugador en el eje x
+			//comprobamos mapa de durezas de arriba si es sólido
+			if((posiciontile.x-(posicionp.x(posición x del jugador)+tamaño sprite)>1)
+			{//movemos derecha}
+		}
+		if(izquierda)
+		{
+			//comprobamos posición del jugador en el eje x
+			//comprobamos mapa de durezas de arriba si es sólido
+			if((posiciontile.x-(posicionp.x(posición x del jugador))>1)
+			{//movemos izquierda}
+		}
+		if(disparo)
+		{
+			disparo=1;//activamos el trigger para disparo, hasta que no choque con un obstaculo/enemigo o salga por pantalla lo seguimos controlando
+			//si mira a la izquierda dispara a la izquierda
+			if(posicion==izquierda)
+			{
+				disparox=-3; 
+			}
+			if(posicion==derecha)
+			{
+				disparox=+3; 
+			}
+			//si mira a la derecha dispara a la derecha
+		}
+	}
+	*/
+	/**************************************************************************************************/
 		//cpct_etm_drawTilemap2x4 (100, 8, SCR, g_tile_block);
       // Scan Keyboard (fastest routine)
       // The Keyboard has to be scanned to obtain pressed / not pressed status of
@@ -149,7 +241,8 @@ void main(void) {
       // it will still be inside screen boundaries
 	  //detectamos si va en una dirección o en otra para cambiar el sprite
 	  //dibujamos mago a la derecha
-	  
+	  //Pendiente control de colisiones
+	 
 	  
 		  if      (cpct_isKeyPressed(Key_CursorRight) && posicionp.x < (SCR_W - SP_W) ) {++posicionp.x; pos_player=0;}
 		  //dibujamos mago a la izquierda
@@ -193,8 +286,22 @@ void main(void) {
 	  {
 		  cpct_drawSpriteMasked(g_tile_mago_simple_iz, pvideomem, SP_W, SP_H);
 	  }
+	  
+	    //debug mostramos información de debug en pantalla
+		//escribimos las coordinadas del jugador en pantalla
+		  //incluimos esta funcion que transforma el texto y lo mete en la variable para poder mostrarlo por pantalla
+		  if (valorx!=posicionp.x || valory!=posicionp.y)
+		  {
+			  valorx=posicionp.x;
+			  valory=posicionp.y;
+		 sprintf(debugtext, "X: %u Y: %u", valorx,valory);
+		cpct_drawStringM1(debugtext,debugmem,2,1);
+		//para tener información de las coordenadas vamos a crear un cursor que podamos mover en todas las direcciones y que nos dé
+		//la posición en la que está, para poder hacer cálculos más precisos
+		  }
       
-   }   
+   }      
+  
 }
 //Cargamos las fases, por cada fase sería necesario crear un mapa de tiles con durezas para saber si son bloques solidos o atravesables
 

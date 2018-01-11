@@ -28,3 +28,6 @@ Tenemos que pasarle la información de la mascara para que no nos salga el color 
 -------
 cpct_drawSpriteMasked (con máscara para evitar que salga el recuadro del fondo, así que nos quedarían 3 colores útiles¿?)
 necesitamos definir una paleta que sería para cada juego o pantalla
+
+
+make para compilar el programa
