@@ -137,6 +137,10 @@ Z80CCLINKARGS := -mz80 --no-std-crt0 -Wl-u \
 ####
 include $(CPCT_PATH)/cfg/global_functions.mk
 
+# Convert images and tilemaps
+include cfg/image_conversion.mk
+include cfg/tilemap_conversion.mk
+
 # Calculate all subdirectories
 SUBDIRS       := $(filter-out ., $(shell find $(SRCDIR) -type d -print))
 OBJDSKINCSDIR := $(OBJDIR)/$(DSKFILESDIR)
@@ -144,6 +148,7 @@ OBJSUBDIRS    := $(OBJDSKINCSDIR) $(foreach DIR, $(SUBDIRS), $(patsubst $(SRCDIR
 
 # Calculate all source files
 CFILES         := $(foreach DIR, $(SUBDIRS), $(wildcard $(DIR)/*.$(C_EXT)))
+CFILES         := $(IMGCFILES) $(filter-out $(IMGCFILES), $(CFILES))
 ASMFILES       := $(foreach DIR, $(SUBDIRS), $(wildcard $(DIR)/*.$(ASM_EXT)))
 BIN2CFILES     := $(foreach DIR, $(SUBDIRS), $(wildcard $(DIR)/*.$(BIN_EXT)))
 DSKINCSRCFILES := $(wildcard $(DSKFILESDIR)/*)

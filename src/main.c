@@ -58,6 +58,8 @@ void main(void) {
 #include <stdio.h>
 #include <cpctelera.h>
 #include "mago_simple.c"
+#include "tiles_nivel1.h"
+#include "tiles_wiz.h"
 #include <string.h>
 // Sprite size (in bytes)
 #define SP_W   3
@@ -66,6 +68,10 @@ void main(void) {
 // Screen size (in bytes)
 #define SCR_W   80
 #define SCR_H  200
+//definimos las coordenadas del mapa
+#define ORIGEN_MAPA_Y 0 //empiezo en 0,0
+#define ORIGEN_MAPA  cpctm_screenPtr(CPCT_VMEM_START,0,ORIGEN_MAPA_Y)
+
 
 //definimos propiedades del disparo
 u8 disparo=0;//por defecto no está disparando 
@@ -74,11 +80,15 @@ typedef struct
    
 } Tdisparo;//por defecto no hay disparo , pero en el momento que pulse deberemos crear una instancia de disparo y dejarla activa hasta que desaparezca
 
+//definimos el mapa de tiles
+u8* mapa;
+
 //definimos el comienzo de la memoria de video
 #define VMEM (u8*)0xC000
 
 //creamos la paleta porque sino coge la del firmware con el fondo azul y letras amarillas
-const u8 g_palette[4]={0, 2, 23, 26};
+//const u8 g_palette[4]={0, 2, 23, 26};
+const u8 g_palette[4]={11, 13, 23, 26};
 
 u8 player_salto=0;//inciamos la variable para detectar si está o no saltando 0 si no y 1 si sí
 u8 subiendo=0;//variable para indicar si está subiendo o bajando
@@ -90,6 +100,12 @@ typedef struct
 } Tplayer;
 
 //
+
+void dibujarMapa()
+{
+  cpct_etm_drawTilemap2x4(g_map1_W,g_map1_H, ORIGEN_MAPA,mapa);  
+}
+
 //parametros de inicializacion
 void init()
 {
@@ -104,6 +120,10 @@ void init()
    cpct_fw2hw     (g_palette, 4); // Convert our palette from firmware to hardware colours 
    cpct_setPalette(g_palette, 4); // Set up the hardware palette using hardware colours   
    cpct_setBorder(g_palette[0]);
+
+   mapa=g_map1;
+  cpct_etm_setTileset2x4(g_tileset);
+   dibujarMapa();
 }
 
 //Cargamos la pantalla de inicio
@@ -116,6 +136,7 @@ void pantalla_start()
    //0: start game
    //abajo ponemos los titulos de crédito
 }
+
 
 // MAIN: Using keyboard to move a sprite example
 //codigo principal del juego, en el momento que perdamos volvemos a la función pantalla_start()
@@ -161,18 +182,18 @@ void main(void) {
 		//	  ;  //incluimos esta funcion que transforma el texto y lo mete en la variable para poder mostrarlo por pantalla
       //pintamos el escenario, el bloque en el que se mueve el protagonista
 		//cpct_drawSprite(g_tile_block, scenevideomem, 2, 8);//el ancho es en bytes y se multiplica por 4 para el modo 1
-		//cpct_drawTileAligned2x8(g_tile_block,  scenevideomem);
+	//	cpct_drawTileAligned2x8(g_tile_block,  scenevideomem);
 //dibujamos las plataformas
-	for(i=0; i < 192; i += 8) {
+	/*for(i=0; i < 192; i += 8) {
 		//cargamos mapa de tiles
 		//cargamos mapa de durezas
 		//mostramos mapa de tiles
 		//las tiles completamos las cargamos solo una vez, luego solo modificaríamos las tiles donde va el personaje, o hay enemigos
 		//o hay animaciones
       scenevideomem = cpct_getScreenPtr(VMEM, i, 116);//empieza en X=0 Y=116 que es debajo del jugador
-	  cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);  //lo seleccionamos la caja de tiles en cuestión
-      cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);       
-   }
+	 // cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);  //lo seleccionamos la caja de tiles en cuestión
+     // cpct_drawTileAligned2x4(g_tile_block,  scenevideomem);       
+   }*/
    
    /***************************************************************************************************/
    //Cargaríamos mapa de tiles
