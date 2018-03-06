@@ -58,6 +58,7 @@ void main(void) {
 #include <stdio.h>
 #include <cpctelera.h>
 #include "mago_simple.c"
+#include "mago_simple.h"
 #include "tiles_nivel1.h"
 #include "tiles_wiz.h"
 #include <string.h>
@@ -70,6 +71,8 @@ void main(void) {
 #define SCR_H  200
 //definimos las coordenadas del mapa
 #define ORIGEN_MAPA_Y 0 //empiezo en 0,0
+//VMEM
+
 #define ORIGEN_MAPA  cpctm_screenPtr(CPCT_VMEM_START,0,ORIGEN_MAPA_Y)
 
 
@@ -84,11 +87,11 @@ typedef struct
 u8* mapa;
 
 //definimos el comienzo de la memoria de video
-#define VMEM (u8*)0xC000
+//#define VMEM (u8*)0xC000
 
 //creamos la paleta porque sino coge la del firmware con el fondo azul y letras amarillas
 //const u8 g_palette[4]={0, 2, 23, 26};
-const u8 g_palette[4]={11, 13, 23, 26};
+const u8 g_palette[4]={0, 13, 23, 26};
 
 u8 player_salto=0;//inciamos la variable para detectar si está o no saltando 0 si no y 1 si sí
 u8 subiendo=0;//variable para indicar si está subiendo o bajando
@@ -99,6 +102,8 @@ typedef struct
    
 } Tplayer;
 
+
+Tplayer posicionp={100,100};
 //
 
 void dibujarMapa()
@@ -119,11 +124,14 @@ void init()
    // Set the colour palette
    cpct_fw2hw     (g_palette, 4); // Convert our palette from firmware to hardware colours 
    cpct_setPalette(g_palette, 4); // Set up the hardware palette using hardware colours   
-   cpct_setBorder(g_palette[0]);
+   cpct_setBorder(g_palette[1]);
 
    mapa=g_map1;
   cpct_etm_setTileset2x4(g_tileset);
    dibujarMapa();
+  posicionp.x=20;
+   posicionp.y=50;
+   
 }
 
 //Cargamos la pantalla de inicio
@@ -137,11 +145,23 @@ void pantalla_start()
    //abajo ponemos los titulos de crédito
 }
 
+//Obtenemos el tile en el que está el protagonista
+u8* obtenerTilePtr(u8 x, u8 y) {
+   return mapa + (y-ORIGEN_MAPA_Y)/2*g_map1_W + x/2;
+}
 
+
+u8 sobreSuelo() {
+   u8* tileSuelo = obtenerTilePtr(posicionp.x+2, posicionp.y + SP_H+1);
+   if (*tileSuelo < 2 || *(tileSuelo+SP_W/2-3) < 2)
+      return 1;
+
+   return 0;
+}
 // MAIN: Using keyboard to move a sprite example
 //codigo principal del juego, en el momento que perdamos volvemos a la función pantalla_start()
 void main(void) {
-   Tplayer posicionp={0,100};
+  
    //Tscene posicion={0,50}
    u8* pvideomem;
    u8* scenevideomem;
@@ -159,9 +179,9 @@ void main(void) {
    //
    while(1) {
       cpct_waitVSYNC ();//esperamos a que haya recorrido la pantalla
-      pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+      pvideomem = cpct_getScreenPtr(CPCT_VMEM_START, posicionp.x, posicionp.y);
 	//  scenevideomem=cpct_getScreenPtr(VMEM,0,116);
-	  debugmem = cpct_getScreenPtr(VMEM,32,0);
+	  debugmem = cpct_getScreenPtr(CPCT_VMEM_START,32,0);
      /*
       //para solo repintar cuando haya un cambio
       if(pvideomem!=pvideomback)
@@ -274,6 +294,7 @@ void main(void) {
 		  if      (cpct_isKeyPressed(Key_CursorUp)    && posicionp.y > 0  && player_salto==0            ) {player_salto=1;subiendo=1;}
 		  
 		  //Función de salto, necesario comprobar los tiles si está encima o debajo de un tile si puede ir abajo o si puede subir arriba
+		  
 		  if(player_salto>0)//está saltando , cuando player_salto==
 	  {
 		  if((player_salto<20) && (subiendo==1))
@@ -284,16 +305,32 @@ void main(void) {
 		  {
 			  subiendo=0;
 		  }
-		  if((player_salto>0) && (subiendo==0))
-		  {++posicionp.y;
+		  
+		  //comprobamos si eld tile es 0 o 1 sino esta encima de uno de estos sigue bajando
+		  if((player_salto>0 || sobreSuelo()==1) && (subiendo==0))
+		  {
+			  ++posicionp.y;
+			  if(player_salto==0)
+			  {
+			  }
+			  else
+			  {
 			player_salto--;
+			  }
 		  }
 	  }
+	  
+	 
+		  if(sobreSuelo()==1)
+		  {
+			  ++posicionp.y;
+		  }
+	  
 		  //dibujamos mago agachado/abajo
 		  //else if (cpct_isKeyPressed(Key_CursorDown)  && posicionp.y < (SCR_H - SP_H) ) {++posicionp.y;}
 	  
       // Get video memory byte for coordinates x, y of the sprite (in bytes)
-     pvideomem = cpct_getScreenPtr(VMEM, posicionp.x, posicionp.y);
+     pvideomem = cpct_getScreenPtr(CPCT_VMEM_START, posicionp.x, posicionp.y);
      //repintamos el cuadrado del color de fondo para que deje estela
     
       // Draw the sprite in the video memory location got from coordinates x, y     
@@ -315,7 +352,7 @@ void main(void) {
 		  {
 			  valorx=posicionp.x;
 			  valory=posicionp.y;
-		 sprintf(debugtext, "X: %u Y: %u", valorx,valory);
+		 sprintf(debugtext, "X: %u Y: %u mapa %u", valorx,valory,sobreSuelo());
 		cpct_drawStringM1(debugtext,debugmem,2,1);
 		//para tener información de las coordenadas vamos a crear un cursor que podamos mover en todas las direcciones y que nos dé
 		//la posición en la que está, para poder hacer cálculos más precisos
@@ -324,6 +361,8 @@ void main(void) {
    }      
   
 }
+
+
 //Cargamos las fases, por cada fase sería necesario crear un mapa de tiles con durezas para saber si son bloques solidos o atravesables
 
 //Cargamos la primera fase
